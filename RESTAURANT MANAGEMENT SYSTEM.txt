@@ -1,0 +1,236 @@
+RESTAURANT MANAGEMENT SYSTEM 
+
+
+Enter password: **************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.44 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| dimple             |
+| information_schema |
+| mysql              |
+| performance_schema |
+| restaurant_db      |
+| s215               |
+| sys                |
++--------------------+
+7 rows in set (0.00 sec)
+
+mysql> use restaurant_db;
+Database changed
+mysql> create table customers(customer_id int auto_increment primary key, name varchar(30) not null, phone varchar(15) unique);
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> create table menu ( items_id int auto_increment primary key, item_name varchar(30) not null,price decimal(10,2) not null check (price > 0));
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> create table employees(emp_id int auto_increment primary key,name varchar(30)not null,role varchar (50) not null);
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> create table orders(order_id int auto_increment primary key, customer_id int,emp_id int,order_date datetime default current_timestamp, foreign key(customer_id) references customers(customer_id) on delete cascade, foreign key (emp_id) references employees(emp_id) on delete set null );
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> create table order_details( detail_id int auto_increment primary key,order_id int,item_id int,qunatity int check (qunatity > 0), foreign key(order_id) references orders(order_id) on delete cascade, foreign key (item_id) references menu(items_id) on delete cascade );
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> insert into menu(item_name,price) values('Veg Spring Rolls', 120),('Paneer Tikka', 180),('Chicken 65', 200),('French Fries', 100),('Garlic Bread', 90),('Veg Biryani', 150),('Paneer Butter Masala', 220),('Dal Tadka', 130),('Mixed Veg Curry', 160),('Jeera Rice', 140),('Chicken Biryani', 220),('Butter Chicken', 260),('Chicken Curry', 200),('Fish Fry', 240),('Egg Curry', 150),('Pizza', 250),('Burger', 120),('Sandwich', 100),('Pasta', 180),('Noodles', 140),('Coke', 50),('Pepsi', 50),('Lemon Juice', 40),('Coffee', 60),('Milkshake', 90),('Ice Cream', 80),('Gulab Jamun', 70),('Rasgulla', 70),('Brownie', 120),('Cake', 150);\
+Query OK, 30 rows affected (0.06 sec)
+Records: 30  Duplicates: 0  Warnings: 0
+
+mysql> select*from menu;
++----------+----------------------+--------+
+| items_id | item_name            | price  |
++----------+----------------------+--------+
+|        1 | Veg Spring Rolls     | 120.00 |
+|        2 | Paneer Tikka         | 180.00 |
+|        3 | Chicken 65           | 200.00 |
+|        4 | French Fries         | 100.00 |
+|        5 | Garlic Bread         |  90.00 |
+|        6 | Veg Biryani          | 150.00 |
+|        7 | Paneer Butter Masala | 220.00 |
+|        8 | Dal Tadka            | 130.00 |
+|        9 | Mixed Veg Curry      | 160.00 |
+|       10 | Jeera Rice           | 140.00 |
+|       11 | Chicken Biryani      | 220.00 |
+|       12 | Butter Chicken       | 260.00 |
+|       13 | Chicken Curry        | 200.00 |
+|       14 | Fish Fry             | 240.00 |
+|       15 | Egg Curry            | 150.00 |
+|       16 | Pizza                | 250.00 |
+|       17 | Burger               | 120.00 |
+|       18 | Sandwich             | 100.00 |
+|       19 | Pasta                | 180.00 |
+|       20 | Noodles              | 140.00 |
+|       21 | Coke                 |  50.00 |
+|       22 | Pepsi                |  50.00 |
+|       23 | Lemon Juice          |  40.00 |
+|       24 | Coffee               |  60.00 |
+|       25 | Milkshake            |  90.00 |
+|       26 | Ice Cream            |  80.00 |
+|       27 | Gulab Jamun          |  70.00 |
+|       28 | Rasgulla             |  70.00 |
+|       29 | Brownie              | 120.00 |
+|       30 | Cake                 | 150.00 |
++----------+----------------------+--------+
+30 rows in set (0.03 sec)
+
+mysql> insert into employees(name,role) values('Ravi', 'Manager'),('Anu', 'Waiter'),('Kiran', 'Chef'),('Sneha', 'Cashier'),('Arjun', 'Waiter'),('Meena', 'Cleaner'),('Vikram', 'Supervisor');
+Query OK, 7 rows affected (0.01 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+
+mysql> select * from employees;
++--------+--------+------------+
+| emp_id | name   | role       |
++--------+--------+------------+
+|      1 | Ravi   | Manager    |
+|      2 | Anu    | Waiter     |
+|      3 | Kiran  | Chef       |
+|      4 | Sneha  | Cashier    |
+|      5 | Arjun  | Waiter     |
+|      6 | Meena  | Cleaner    |
+|      7 | Vikram | Supervisor |
++--------+--------+------------+
+7 rows in set (0.00 sec)
+
+mysql> INSERT INTO customers(name, phone) VALUES ('Vamsi', '9001122334'),('Lakshmi', '9011223344'),('Teja', '9022334455'),('Anjali', '9033445566'),('Manoj', '9044556677'),('Pooja', '9055667788'),('Karthik', '9066778899'),('Swathi', '9077889900'),('Nikhil', '9088990011'),('Harsha', '9099001122'),('Keerthi', '9100112233'),('Varun', '9111223344'),('Deepika', '9122334455'),('Rohit', '9133445566'),('Aishwarya', '9144556677');
+Query OK, 15 rows affected (0.04 sec)
+Records: 15  Duplicates: 0  Warnings: 0
+
+mysql> select * from customers;
++-------------+-----------+------------+
+| customer_id | name      | phone      |
++-------------+-----------+------------+
+|           1 | Vamsi     | 9001122334 |
+|           2 | Lakshmi   | 9011223344 |
+|           3 | Teja      | 9022334455 |
+|           4 | Anjali    | 9033445566 |
+|           5 | Manoj     | 9044556677 |
+|           6 | Pooja     | 9055667788 |
+|           7 | Karthik   | 9066778899 |
+|           8 | Swathi    | 9077889900 |
+|           9 | Nikhil    | 9088990011 |
+|          10 | Harsha    | 9099001122 |
+|          11 | Keerthi   | 9100112233 |
+|          12 | Varun     | 9111223344 |
+|          13 | Deepika   | 9122334455 |
+|          14 | Rohit     | 9133445566 |
+|          15 | Aishwarya | 9144556677 |
++-------------+-----------+------------+
+15 rows in set (0.00 sec)
+
+
+ INSERT INTO orders(customer_id, emp_id) VALUES (1,2),(2,3),(3,1),(4,5),(5,2), (6,4),(7,3),(8,1),(9,6),(10,7);
+Query OK, 10 rows affected (0.04 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+
+mysql> INSERT INTO order_details(order_id, item_id, qunatity) VALUES (1, 1, 2), (1, 5, 1),(2, 3, 3), (2, 10, 2),(3, 7, 1),(3, 16, 2),(4, 12, 1), (4, 20, 2),(5, 2, 2),(5, 21, 3);
+Query OK, 10 rows affected (0.04 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+
+mysql> SELECT
+    ->     o.order_id,
+    ->     c.name AS customer_name,
+    ->     e.name AS employee_name,             
+    ->     m.item_name,
+    ->     od.qunatity,                       //Full Order Details (JOIN of all tables)
+    ->     m.price,
+    ->     (od.qunatity * m.price) AS total_price,
+    ->     o.order_date
+    -> FROM orders o
+    -> JOIN customers c ON o.customer_id = c.customer_id
+    -> JOIN employees e ON o.emp_id = e.emp_id
+    -> JOIN order_details od ON o.order_id = od.order_id
+    -> JOIN menu m ON od.item_id = m.items_id;
++----------+---------------+---------------+----------------------+----------+--------+-------------+---------------------+
+| order_id | customer_name | employee_name | item_name            | qunatity | price  | total_price | order_date          |
++----------+---------------+---------------+----------------------+----------+--------+-------------+---------------------+
+|        3 | Teja          | Ravi          | Paneer Butter Masala |        1 | 220.00 |      220.00 | 2026-04-17 12:45:14 |
+|        3 | Teja          | Ravi          | Pizza                |        2 | 250.00 |      500.00 | 2026-04-17 12:45:14 |
+|        1 | Vamsi         | Anu           | Veg Spring Rolls     |        2 | 120.00 |      240.00 | 2026-04-17 12:45:14 |
+|        1 | Vamsi         | Anu           | Garlic Bread         |        1 |  90.00 |       90.00 | 2026-04-17 12:45:14 |
+|        5 | Manoj         | Anu           | Paneer Tikka         |        2 | 180.00 |      360.00 | 2026-04-17 12:45:14 |
+|        5 | Manoj         | Anu           | Coke                 |        3 |  50.00 |      150.00 | 2026-04-17 12:45:14 |
+|        2 | Lakshmi       | Kiran         | Chicken 65           |        3 | 200.00 |      600.00 | 2026-04-17 12:45:14 |
+|        2 | Lakshmi       | Kiran         | Jeera Rice           |        2 | 140.00 |      280.00 | 2026-04-17 12:45:14 |
+|        4 | Anjali        | Arjun         | Butter Chicken       |        1 | 260.00 |      260.00 | 2026-04-17 12:45:14 |
+|        4 | Anjali        | Arjun         | Noodles              |        2 | 140.00 |      280.00 | 2026-04-17 12:45:14 |
++----------+---------------+---------------+----------------------+----------+--------+-------------+---------------------+
+10 rows in set (0.00 sec)
+
+
+ SELECT
+    ->     o.order_id,
+    ->     c.name AS customer_name,
+    ->     SUM(od.qunatity * m.price) AS total_bill  //Bill Generation (Total per Order)
+    -> FROM orders o
+    -> JOIN customers c ON o.customer_id = c.customer_id
+    -> JOIN order_details od ON o.order_id = od.order_id
+    -> JOIN menu m ON od.item_id = m.items_id
+    -> GROUP BY o.order_id, c.name;
++----------+---------------+------------+
+| order_id | customer_name | total_bill |
++----------+---------------+------------+
+|        1 | Vamsi         |     330.00 |
+|        2 | Lakshmi       |     880.00 |
+|        3 | Teja          |     720.00 |
+|        4 | Anjali        |     540.00 |
+|        5 | Manoj         |     510.00 |
++----------+---------------+------------+
+5 rows in set (0.04 sec)
+
+
+mysql> SELECT
+    ->     m.item_name,                   // Detailed Bill (Item-wise bill for one order)
+    ->     od.qunatity,
+    ->     m.price,
+    ->     (od.qunatity * m.price) AS total
+    -> FROM order_details od
+    -> JOIN menu m ON od.item_id = m.items_id
+    -> WHERE od.order_id = 1;
++------------------+----------+--------+--------+
+| item_name        | qunatity | price  | total  |
++------------------+----------+--------+--------+
+| Veg Spring Rolls |        2 | 120.00 | 240.00 |
+| Garlic Bread     |        1 |  90.00 |  90.00 |
++------------------+----------+--------+--------+
+2 rows in set (0.03 sec)
+
+
+ SELECT
+    ->     SUM(od.qunatity * m.price) AS total_revenue
+    -> FROM order_details od
+    -> JOIN menu m ON od.item_id = m.items_id;
++---------------+
+| total_revenue |                      //Total Revenue of Restaurant
++---------------+
+|       2980.00 |
++---------------+
+1 row in set (0.03 sec)
+
+
+ SELECT
+       o.order_id,
+   SUM(od.qunatity * m.price) AS total_bill
+  FROM orders o                                     //Highest Bill Order
+  JOIN order_details od ON o.order_id = od.order_id JOIN menu m ON od.item_id = m.items_id GROUP BY o.order_id ORDER BY total_bill DESC LIMIT 1;
++----------+------------+
+| order_id | total_bill |
++----------+------------+
+|        2 |     880.00 |
++----------+------------+
+1 row in set (0.00 sec)
